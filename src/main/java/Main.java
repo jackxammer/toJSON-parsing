@@ -20,7 +20,7 @@ import java.util.List;
 
 public class Main {
 
-    public static List<String> forClass = new ArrayList<>();
+    public static List<String> itemsForClass = new ArrayList<>();
 
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
@@ -82,14 +82,14 @@ public class Main {
         Node rootNode = doc.getDocumentElement();
         read(rootNode);
 
-        for (int i = 0; i < forClass.size(); i = i + 5) {
+        for (int i = 0; i < itemsForClass.size(); i = i + 5) {
             int j = i;
             Employee employee = new Employee();
-            employee.id = Long.parseLong(forClass.get(j++));
-            employee.firstName = forClass.get(j++);
-            employee.lastName = forClass.get(j++);
-            employee.country = forClass.get(j++);
-            employee.age = Integer.parseInt(forClass.get(j++));
+            employee.id = Long.parseLong(itemsForClass.get(j++));
+            employee.firstName = itemsForClass.get(j++);
+            employee.lastName = itemsForClass.get(j++);
+            employee.country = itemsForClass.get(j++);
+            employee.age = Integer.parseInt(itemsForClass.get(j++));
             parsedList.add(employee);
         }
 
@@ -103,7 +103,7 @@ public class Main {
             if (Node.ELEMENT_NODE == node_.getNodeType()) {
                 if (!node_.getNodeName().equals("employee")) {
                     Element element = (Element) node_;
-                    forClass.add(element.getTextContent());
+                    itemsForClass.add(element.getTextContent());
                 }
                 read(node_);
             }
