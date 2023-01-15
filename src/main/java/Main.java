@@ -20,8 +20,6 @@ import java.util.List;
 
 public class Main {
 
-    public static List<String> itemsForClass = new ArrayList<>();
-
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException {
         String[] columnMapping = {"id", "firstName", "lastName", "country", "age"};
         String fileName = "data.csv";
@@ -80,33 +78,22 @@ public class Main {
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(name);
         Node rootNode = doc.getDocumentElement();
-        read(rootNode);
+        NodeList nodeList = rootNode.getChildNodes();
 
-        for (int i = 0; i < itemsForClass.size(); i = i + 5) {
-            int j = i;
-            Employee employee = new Employee();
-            employee.id = Long.parseLong(itemsForClass.get(j++));
-            employee.firstName = itemsForClass.get(j++);
-            employee.lastName = itemsForClass.get(j++);
-            employee.country = itemsForClass.get(j++);
-            employee.age = Integer.parseInt(itemsForClass.get(j++));
-            parsedList.add(employee);
+        for (int i = 1; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (Node.ELEMENT_NODE == node.getNodeType()) {
+                Element element = (Element) node;
+                parsedList.add(new Employee(
+                        Long.parseLong(element.getElementsByTagName("id").item(0).getTextContent()),
+                        element.getElementsByTagName("firstName").item(0).getTextContent(),
+                        element.getElementsByTagName("lastName").item(0).getTextContent(),
+                        element.getElementsByTagName("country").item(0).getTextContent(),
+                        Integer.parseInt(element.getElementsByTagName("age").item(0).getTextContent())
+                ));
+            }
         }
 
         return parsedList;
-    }
-
-    public static void read(Node node) {
-        NodeList nodeList = node.getChildNodes();
-        for (int i = 0; i < nodeList.getLength(); i++) {
-            Node node_ = nodeList.item(i);
-            if (Node.ELEMENT_NODE == node_.getNodeType()) {
-                if (!node_.getNodeName().equals("employee")) {
-                    Element element = (Element) node_;
-                    itemsForClass.add(element.getTextContent());
-                }
-                read(node_);
-            }
-        }
     }
 }
